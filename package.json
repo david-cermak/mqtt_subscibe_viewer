@@ -1,0 +1,35 @@
+{
+  "name": "mqtt-monitor",
+  "version": "1.0.0",
+  "description": "simple mqtt client which subscribes to selected topic (argument) and displays as chart in electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "repository": "https://github.com/david-cermak/mqtt_subscibe_viewer.git",
+  "keywords": [
+    "Electron",
+    "MQTT",
+    "subscribe",
+    "demo"
+  ],
+  "author": "david-cermak",
+  "license": "Apache-2",
+  "devDependencies": {
+    "electron": "^2.0.0",
+    "electron-builder": "^20.28.4"
+  },
+  "dependencies": {
+    "chart.js": "^2.7.2",
+    "date-and-time": "^0.6.2",
+    "mqtt": "^2.18.8"
+  },
+  "build": {
+    "appId": "my.id",
+    "win": {
+      "target": "NSIS"
+    }
+  }
+}
