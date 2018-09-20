@@ -62,3 +62,10 @@ typings/
 
 # Electron dists
 dist
+
+# Parcel files
+.cache
+build
+
+# Overmind
+.overmind.sock
