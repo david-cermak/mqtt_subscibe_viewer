@@ -13,7 +13,7 @@ $ yarn dev
 $ yarn start-dev
 ```
 
-Or if you have any application that supports `Procfile` then just run it. [Overmind](https://github.com/DarthSim/overmind) or [Foreman](https://github.com/ddollar/foreman)
+Or if you have any application that supports `Procfile` then just run it. [Overmind](https://github.com/DarthSim/overmind) -> `overmind s` or [Foreman](https://github.com/ddollar/foreman) -> `foreman start`
 
 
 ### Production mode and packaging app
@@ -33,14 +33,31 @@ Example config:
 
 ```json
 {
-    "server": "mqtt://iot.eclipse.org",
-    "topics": [
+    "server": "mqtt://m2m.eclipse.org:1883",
+    "devices": [
         {
-            "path": "/topic/my_test/temp",
-            "name": "Temperature",
-            "unit": "°C",
-            "min": -10,
-            "max": 40
+            "name": "Device 1",
+            "sources": [
+                {
+                    "path": "/some/temperature",
+                    "name": "Temperature",
+                    "unit": "°C",
+                    "min": -10,
+                    "max": 40
+                },
+            ]
+        },
+        {
+            "name": "Device 2",
+            "sources": [
+                {
+                    "path": "/another/humidity",
+                    "name": "Humidity",
+                    "unit": "%",
+                    "min": 0,
+                    "max": 100
+                }
+            ]
         }
     ]
 }

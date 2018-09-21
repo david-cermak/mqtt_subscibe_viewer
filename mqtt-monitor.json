@@ -1,0 +1,55 @@
+{
+    "server": "mqtt://m2m.eclipse.org:1883",
+    "devices": [
+        {
+            "name": "Device 1",
+            "topics": [
+                {
+                    "path": "/fe79a6e4-39fd-4797-ac70-3d964ed84c67/temperature",
+                    "name": "Temperature",
+                    "unit": "°C",
+                    "min": -10,
+                    "max": 40
+                },
+                {
+                    "path": "/fe79a6e4-39fd-4797-ac70-3d964ed84c67/humidity",
+                    "name": "Humidity",
+                    "unit": "%",
+                    "min": 0,
+                    "max": 100
+                }
+            ]
+        },
+        {
+            "name": "Device 2",
+            "topics": [
+                {
+                    "path": "/5d83b806-9677-4005-bcfa-ad2d1dd86f6a/temp",
+                    "name": "Temperature",
+                    "unit": "°C",
+                    "min": -10,
+                    "max": 80.5
+                }
+            ]
+        },
+        {
+            "name": "Device 3",
+            "topics": [
+                {
+                    "path": "/6d83b806-9677-4005-bcfa-ad2d1dd86f6d/temp",
+                    "name": "Temperature",
+                    "unit": "°C",
+                    "min": -10,
+                    "max": 40
+                },
+                {
+                    "path": "/6d83b806-9677-4005-bcfa-ad2d1dd86f6d/humidity",
+                    "name": "Humidity",
+                    "unit": "%",
+                    "min": 0,
+                    "max": 100
+                }
+            ]
+        }
+    ]
+}

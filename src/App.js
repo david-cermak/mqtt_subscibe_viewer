@@ -1,139 +1,106 @@
 import React, { Component } from 'react';
+import { ErrorMessage } from './ErrorMessage';
+import { Topic } from './Topic';
+import 'bulma/css/bulma.css'
 import './App.css';
+import { _ } from 'lodash';
+import { Columns, Column } from 'react-bulma-components';
+
+
+// Electron APIs
+const electron = window.require('electron');
+const remote = electron.remote;
+const fs = remote.require('fs');
+const mqtt = remote.require('mqtt');
+
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    let data = { configFailed: true }
+
+    // Read configs 
+    const argv = remote.getGlobal('sharedObject').argv;
+
+    let configPath = "mqtt-monitor.json";
+    try {
+      data = JSON.parse(fs.readFileSync(configPath));
+      data.allTopicsData = {};
+
+      _.forEach(data.devices, (device) => {
+        {
+          _.forEach(device.topics,
+            (topic) => {
+              data.allTopicsData[topic.path] = []
+            })
+        }
+      });
+    }
+
+    catch (err) {
+      console.log(err.message);
+    }
+
+    this.state = data;
+
+    // Bind context
+    this.renderTopics = this.renderTopics.bind(this);
+  }
+
+  componentDidMount() {
+    let client = mqtt.connect(this.state.server);
+    // Subscribe to topics
+    client.on('connect', () => {
+      _.forOwn(this.state.allTopicsData, function (data, topic) {
+        client.subscribe(topic, function (err) {
+          if (!err) {
+            console.log(`Subscribed to ${topic}`);
+          }
+        })
+      });
+    });
+
+    client.on('message', (topic, message) => {
+      const at = Date.now();
+      const newValue = parseFloat(message);
+
+      console.log(`Received ${newValue} from ${topic}`);
+
+      const newData = _.cloneDeep(this.state.allTopicsData);
+      newData[topic].push([at, newValue]);
+
+      this.setState({ allTopicsData: newData });
+    })
+  }
+
+  renderTopics(topics, allTopicsData) {
+    return _.map(topics, (topicInfo) => {
+      const topicData = allTopicsData[topicInfo.path];
+      // return <Topic topicData={topicData} key={topicInfo.path} />
+      return <Columns.Column key={topicInfo.path}>{`${_.last(topicData[1])}`}</Columns.Column>
+    });
+  }
+
+  renderDevices(devices, allTopicsData) {
+    return _.map(devices, (device) => {
+      return <Columns key={device.name}>
+        {this.renderTopics(device.topics, allTopicsData)}
+      </Columns>
+    });
+  }
+
+
   render() {
+    const appContent = this.state.configFailed ?
+      <ErrorMessage /> : this.renderDevices(this.state.devices, this.state.allTopicsData);
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Espressif MQQT viewer</h1>
-        </header>
+      <div>
+        {appContent}
       </div>
     );
   }
 }
 
 export default App;
-
-// var Chart = require('chart.js');
-// let date =  require('date-and-time');
-// var remote = require('electron').remote,
-
-// arguments = remote.getGlobal('sharedObject').prop1;
-
-// var mqtt_broker_url = 'mqtt://iot.eclipse.org';
-// var mqtt_topic = '/topic/my_test/temp';
-// var topic_unit = 'Temperature'
-
-// if (arguments[2]) {
-// 	mqtt_broker_url = arguments[1];
-// 	mqtt_topic = arguments[2];
-// 	topic_unit = arguments[3];
-// }
-
-// var ctx = document.getElementById("myChart").getContext('2d');
-// var ctx2 = document.getElementById("myChart2").getContext('2d');
-
-// var line_data =   {
-// 	type: 'line',
-// 	data: {
-// 		labels: ["1", "2", "3", "4", "5", "6"],
-// 		datasets: [{
-// 			label: topic_unit,
-// 			data: [0, 0, 0, 0, 0, 0],
-// 			backgroundColor: [
-// 				'rgba(99, 255, 132, 0.4)',
-// 			],
-// 			borderColor: [
-// 				'rgba(99,255,132,1)',
-// 			],
-// 			borderWidth: 1
-// 		}]
-// 	},
-// 	options: {
-// 		animation: false,
-// 		scales: {
-// 			yAxes: [{
-// 				ticks: {
-// 					beginAtZero:true
-// 				}
-// 			}]
-// 		}
-// 	}
-// };
-// var pie_data = {
-// 	datasets: [{
-// 		data: [10, 90],
-// 		backgroundColor: [
-// 				'rgba(54, 235, 55 , 0.5)',
-// 				'rgba(99, 99, 99, 0.3)',
-// 			]
-// 	}],
-
-// 	labels: [
-// 		topic_unit,
-// 	]
-// };
-
-
-// let timestamp = new Date();
-// line_data.data.labels[0] = date.format(timestamp, 'HH:mm:ss');
-// for (i=1; i<6; i++) {
-// 	timestamp = date.addSeconds(timestamp, 2);
-// 	line_data.data.labels[i] = date.format(timestamp, 'HH:mm:ss');
-// }
-// var g_temp = 0;
-
-// setInterval(function() {
-// 	let timestamp = new Date();
-// 	line_data.data.labels[0] = date.format(timestamp, 'HH:mm:ss');
-// 	for (i=1; i<6; i++) {
-// 		timestamp = date.addSeconds(timestamp, 2);
-// 		line_data.data.labels[i] = date.format(timestamp, 'HH:mm:ss');
-// 	}
-
-// 	line_data.data.datasets[0].data.push(g_temp);
-// 	line_data.data.datasets[0].data.shift();
-// 	var myLineChart = new Chart(ctx, line_data);
-
-// }, 2000);
-
-
-
-// var myDoughnutChart = new Chart(ctx2, {
-//     type: 'doughnut',
-//     data: pie_data,
-//     options: {
-// 		animation: false,
-//     }
-// });
-// var myLineChart = new Chart(ctx, line_data);
-
-// var mqtt = require('mqtt')
-// var client  = mqtt.connect(mqtt_broker_url)
-
-// client.on('connect', function () {
-//   client.subscribe(mqtt_topic, function (err) {
-//     if (!err) {
-//     }
-//   })
-// })
-
-// client.on('message', function (topic, message) {
-// 	g_temp = parseInt(message.toString(), 10);
-
-// 	pie_data.datasets[0].data.push(g_temp)
-// 	pie_data.datasets[0].data.shift()
-// 	pie_data.datasets[0].data.push(100-g_temp)
-// 	pie_data.datasets[0].data.shift()
-// 	var myDoughnutChart = new Chart(ctx2, {
-// 		type: 'doughnut',
-// 		data: pie_data,
-// 		options: {
-// 		animation: false,
-// 		}
-// 	});
-// })
-
-
-

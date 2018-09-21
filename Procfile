@@ -1,2 +1,3 @@
 assets: yarn dev
-app: yarn start-dev
+app: DEBUG_ELECTRON=true yarn start-dev
+test-data: node data-publisher
