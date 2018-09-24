@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import { ErrorMessage } from './ErrorMessage';
-import { Topic } from './Topic';
+import Ring from "ringjs";
+import { Columns, Container } from 'react-bulma-components/full';
+import ErrorMessage from './ErrorMessage';
+import TopicCard from './TopicCard';
 import 'bulma/css/bulma.css'
-import './App.css';
 import { _ } from 'lodash';
-import { Columns, Column } from 'react-bulma-components';
-
 
 // Electron APIs
 const electron = window.require('electron');
 const remote = electron.remote;
 const fs = remote.require('fs');
 const mqtt = remote.require('mqtt');
-
+const currentWindow = remote.getCurrentWindow().removeAllListeners();
 
 class App extends Component {
   constructor(props) {
@@ -23,16 +22,19 @@ class App extends Component {
     // Read configs 
     const argv = remote.getGlobal('sharedObject').argv;
 
+    // TODO: actually use configs
+
     let configPath = "mqtt-monitor.json";
     try {
       data = JSON.parse(fs.readFileSync(configPath));
-      data.allTopicsData = {};
+      data.allTopics = [];
 
       _.forEach(data.devices, (device) => {
         {
           _.forEach(device.topics,
             (topic) => {
-              data.allTopicsData[topic.path] = []
+              data.allTopics.push(topic.path);
+              data[topic.path] = new Ring(300);
             })
         }
       });
@@ -42,7 +44,7 @@ class App extends Component {
       console.log(err.message);
     }
 
-    this.state = data;
+    this.state = { ...data, ...this.getWindowSize() };
 
     // Bind context
     this.renderTopics = this.renderTopics.bind(this);
@@ -52,8 +54,8 @@ class App extends Component {
     let client = mqtt.connect(this.state.server);
     // Subscribe to topics
     client.on('connect', () => {
-      _.forOwn(this.state.allTopicsData, function (data, topic) {
-        client.subscribe(topic, function (err) {
+      _.forEach(this.state.allTopics, (topic) => {
+        client.subscribe(topic, (err) => {
           if (!err) {
             console.log(`Subscribed to ${topic}`);
           }
@@ -63,29 +65,41 @@ class App extends Component {
 
     client.on('message', (topic, message) => {
       const at = Date.now();
-      const newValue = parseFloat(message);
 
-      console.log(`Received ${newValue} from ${topic}`);
-
-      const newData = _.cloneDeep(this.state.allTopicsData);
-      newData[topic].push([at, newValue]);
-
-      this.setState({ allTopicsData: newData });
+      let updatedState = {};
+      this.state[topic].push([at, parseFloat(message)]);
+      updatedState[topic] = this.state[topic];
+      this.setState(updatedState);
     })
+
+    // Track window size
+    currentWindow.on('resize', _.debounce(() => {
+      this.setState(this.getWindowSize());
+    }, 100));
   }
 
-  renderTopics(topics, allTopicsData) {
+  getWindowSize() {
+    const bounds = remote.getCurrentWindow().webContents.getOwnerBrowserWindow().getBounds();
+    return { width: bounds.width, height: bounds.height }
+  }
+
+  renderTopics(topics, height) {
+    const width = this.state.width / topics.length;
+
     return _.map(topics, (topicInfo) => {
-      const topicData = allTopicsData[topicInfo.path];
-      // return <Topic topicData={topicData} key={topicInfo.path} />
-      return <Columns.Column key={topicInfo.path}>{`${_.last(topicData[1])}`}</Columns.Column>
+      return <Columns.Column key={topicInfo.path}>
+        <TopicCard data={this.state[topicInfo.path]} height={height} width={width} info={topicInfo} />
+      </Columns.Column>
     });
   }
 
-  renderDevices(devices, allTopicsData) {
+  renderDevices(devices) {
+    const height = this.state.height / devices.length;
     return _.map(devices, (device) => {
+
       return <Columns key={device.name}>
-        {this.renderTopics(device.topics, allTopicsData)}
+        <Columns.Column size={12} style={{ marginTop: "1em" }}><h1 className="title is-1">{device.name}</h1></Columns.Column>
+        {this.renderTopics(device.topics, height)}
       </Columns>
     });
   }
@@ -93,12 +107,12 @@ class App extends Component {
 
   render() {
     const appContent = this.state.configFailed ?
-      <ErrorMessage /> : this.renderDevices(this.state.devices, this.state.allTopicsData);
+      <ErrorMessage /> : this.renderDevices(this.state.devices);
 
     return (
-      <div>
+      <Container fluid>
         {appContent}
-      </div>
+      </Container>
     );
   }
 }

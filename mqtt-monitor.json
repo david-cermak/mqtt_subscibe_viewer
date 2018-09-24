@@ -21,18 +21,6 @@
             ]
         },
         {
-            "name": "Device 2",
-            "topics": [
-                {
-                    "path": "/5d83b806-9677-4005-bcfa-ad2d1dd86f6a/temp",
-                    "name": "Temperature",
-                    "unit": "°C",
-                    "min": -10,
-                    "max": 80.5
-                }
-            ]
-        },
-        {
             "name": "Device 3",
             "topics": [
                 {

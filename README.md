@@ -26,8 +26,10 @@ $ yarn build
 $ yarn dist
 ```
 
-execute with command line argument pointing to JSON configuration for your app. By default it will try to read configuration from `mqtt-monitor.json` placed next to the application.
-for example: `mqtt-monitor.exe path/to/config.json`
+ Upon start program will try to read configuration from `mqtt-monitor.json` placed next to the application.
+ 
+
+Graphs will show last 10 minutes
 
 Example config:
 

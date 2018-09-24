@@ -16,7 +16,12 @@ let mainWindow
 app.on('ready', () => {
   global.sharedObject = { argv: process.argv }
 
-  let mainWindow = new BrowserWindow({ width: 1000, height: 800 })
+  let mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    minHeight: 1200,
+    minWidth: 700
+  })
 
   const startUrl = process.env.ELECTRON_URL || url.format({
     pathname: path.join(__dirname, './build/index.html'),

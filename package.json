@@ -11,7 +11,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps",
-    "fullclean": "rm -rf .cache build node_modules"
+    "fullclean": "rm -rf .cache build"
   },
   "repository": "https://github.com/david-cermak/mqtt_subscibe_viewer.git",
   "keywords": [
@@ -25,21 +25,22 @@
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
     "electron-builder": "^20.28.4",
     "electron-devtools-installer": "^2.2.4",
     "electron-reload": "^1.2.5",
-    "lodash": "^4.17.11",
     "parcel-bundler": "^1.9.7"
   },
   "dependencies": {
     "bulma": "^0.7.1",
-    "chart.js": "^2.7.2",
-    "date-and-time": "^0.6.2",
     "electron": "^3.0.0",
     "mqtt": "^2.18.8",
+    "pondjs": "^0.8.9",
     "react": "^16.0.0",
-    "react-bulma-components": "^2.0.0",
-    "react-dom": "^16.5.2"
+    "react-bulma-components": "2.0.0",
+    "react-dom": "^16.5.2",
+    "react-timeseries-charts": "^0.15.3",
+    "ringjs": "^0.0.1"
   },
   "build": {
     "appId": "mqttviewer.espressif.com",

@@ -42,5 +42,5 @@ function publishData(client) {
 
 client.on('connect', function () {
     console.log(`Connected to ${config.server}`);
-    setInterval(publishData(client), 10000);
+    setInterval(publishData(client), 500);
 })
