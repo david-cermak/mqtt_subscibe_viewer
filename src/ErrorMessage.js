@@ -5,7 +5,7 @@ class ErrorMessage extends Component {
         return (
             <div>
                 <h1>Config was not loaded</h1>
-                <p>Please check that <b>mqtt-viewer.json</b> is present in application directory or config path is provided correctly</p>
+                <p>Please check that <b>.mqtt-viewer.json</b> is present in your home directory or config path is provided correctly</p>
             </div>
         )
     }

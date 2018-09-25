@@ -18,19 +18,21 @@ _.forEach(config.devices, (device) => {
         const delta = Math.abs((topic.max - topic.min) / 30);
         values[topic.path] =
             {
-                current: _.random(topic.min + delta, topic.max - delta, true),
+                current: _.random(topic.min + 5 * delta, topic.max - 5 * delta, true),
                 delta: delta
             }
     });
 });
-
 
 function publishData(client) {
     return () => {
         _.forEach(config.devices, (device) => {
             _.forEach(device.topics, (topic) => {
                 const delta = values[topic.path].delta;
-                const value = values[topic.path].current + _.random(-delta, delta, true);
+                const value = topic.boolean ?
+                    _.random(0, 1, true) :
+                    values[topic.path].current + _.random(-delta, delta, true);
+
                 values[topic.path].current = value;
                 console.log(`Publishing ${value} to ${topic.path}`);
                 client.publish(topic.path, String(value));
@@ -42,5 +44,5 @@ function publishData(client) {
 
 client.on('connect', function () {
     console.log(`Connected to ${config.server}`);
-    setInterval(publishData(client), 500);
+    setInterval(publishData(client), 3000);
 })

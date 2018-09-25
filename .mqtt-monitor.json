@@ -1,5 +1,5 @@
 {
-    "server": "mqtt://m2m.eclipse.org:1883",
+    "server": "mqtt://black-pearl.local:1883",
     "devices": [
         {
             "name": "Mesh sense kit",
@@ -32,7 +32,7 @@
             ]
         },
         {
-            "name": "Face detector",
+            "name": "Face detection",
             "topics": [
                 {
                     "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:57:e0:d8/cid_0000",
@@ -43,7 +43,7 @@
                     "scale": 1,
                     "reset_period": 2000,
                     "boolean": true,
-                    "trueMessage": "Face detected! 😀 ",
+                    "trueMessage": "Face detected!  😀 ",
                     "falseMessage": " "
                 }
             ]

@@ -9,7 +9,7 @@
     "start": "electron .",
     "build": "parcel build ./src/index.html -d build/ --public-url ./",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "yarn build && electron-builder -mw",
     "postinstall": "electron-builder install-app-deps",
     "fullclean": "rm -rf .cache build"
   },
@@ -29,11 +29,11 @@
     "electron-builder": "^20.28.4",
     "electron-devtools-installer": "^2.2.4",
     "electron-reload": "^1.2.5",
-    "parcel-bundler": "^1.9.7"
+    "parcel-bundler": "^1.9.7",
+    "electron": "^3.0.0"
   },
   "dependencies": {
     "bulma": "^0.7.1",
-    "electron": "^3.0.0",
     "mqtt": "^2.18.8",
     "pondjs": "^0.8.9",
     "react": "^16.0.0",
@@ -45,7 +45,7 @@
   "build": {
     "appId": "mqttviewer.espressif.com",
     "win": {
-      "target": "NSIS"
+      "target": "portable"
     },
     "files": [
       "main.js",

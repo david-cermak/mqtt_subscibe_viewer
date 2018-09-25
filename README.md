@@ -1,5 +1,5 @@
 # mqtt_subscibe_viewer
-Simple electron based mqtt client which subscribes a number of selected topics (should send a number) and displays them as chart for last hour and gauge with current value
+Simple electron based mqtt client which subscribes a number of selected topics (should send a number) and displays them as a plot for last 10 minutes and gauge with current value
 
 ## Development
 Make sure that [yarn](https://yarnpkg.com/lang/en/docs/install) installed on your system then run `yarn install` to fetch all dependencies
@@ -17,19 +17,15 @@ Or if you have any application that supports `Procfile` then just run it. [Overm
 
 
 ### Production mode and packaging app
-Run this command to bundle code in production mode
+Run this command to build production apps for Windows, macOS code in production mode
 ``` bash
-# Parcel bundle code once
-$ yarn build
-
 # Create executables
 $ yarn dist
 ```
 
- Upon start program will try to read configuration from `mqtt-monitor.json` placed next to the application.
- 
+execute with command line argument pointing to JSON configuration for your app. By default it will try to read configuration from `.mqtt-monitor.json` placed in your home directory (`/Users/user_name/.mqtt-monitor.json` on macOS, `/home/user_name/.mqtt-monitor.json` on Linux and `C:\Users\user_name\.mqtt-monitor.json` on Windows).
 
-Graphs will show last 10 minutes
+Also you can pass config path through command line, for example: `mqtt-monitor.exe path/to/config.json`
 
 Example config:
 
@@ -65,4 +61,4 @@ Example config:
 }
 ```
 
-![alt text](mqtt_mon.png)
+![alt text](mqtt-viewer.png)

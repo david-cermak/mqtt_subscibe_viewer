@@ -39,82 +39,88 @@ class TopicCard extends Component {
         const info = this.props.info;
         const currentValue = this.lastValue(this.props.data.toArray()).toFixed(1);
         const width = this.props.width - 64;
-        const height = this.props.height - 180;
+        const height = info.boolean ? 50 : Math.round(Math.max(this.props.height - 180, 160));
 
-        return <Columns>
-            <Columns.Column>
-                <Gauge value={currentValue}
-                    label={info.name}
-                    min={info.min} max={info.max}
-                    symbol={info.unit} height={height} width={width / 15 * 5} />
-            </Columns.Column>
-            <Columns.Column>
-                <ChartContainer
-                    timeRange={new TimeRange([Date.now() - 600000, Date.now()])}
-                    width={width / 15 * 7}
-                    timeAxisTickCount={2}
-                    style={
-                        {
-                            label: {
-                                stroke: "none",
-                                fill: "#363636",
-                                fontWeight: 100,
-                                fontSize: 12
-                            },
-                            values: {
-                                stroke: "none",
-                                fill: "#363636",
-                                fontWeight: 100,
-                                fontSize: 11
-                            },
-                            ticks: { fill: "none", stroke: "#f5f5f5" },
-                            axis: { fill: "none", stroke: "transparent" }
-                        }
-                    }>
-                    <ChartRow height={height}>
-                        <YAxis
-                            id="axis1"
-                            label=""
-                            min={info.min}
-                            max={info.max}
-                            width="20"
-                            type="linear"
-                            format=".0f"
-                            tickCount={5}
-                            showGrid={true}
-                            style={
-                                {
-                                    label: {
-                                        stroke: "none",
-                                        fill: "#363636",
-                                        fontWeight: 100,
-                                        fontSize: 12
-                                    },
-                                    values: {
-                                        stroke: "none",
-                                        fill: "#363636",
-                                        fontWeight: 100,
-                                        fontSize: 11,
-                                    },
-                                    ticks: { fill: "none", stroke: "#f5f5f5" },
-                                    axis: { fill: "none", stroke: "transparent" }
-                                }}
-                        />
-                        <Charts>
-                            <LineChart
-                                axis="axis1"
-                                series={data}
-                                interpolation="curveBasis"
-                                column={["value"]}
+
+
+        return info.boolean ?
+            <h1 className="title is-2" style={{ height: `${height}px` }}>
+                {Math.round(currentValue) ? (info.trueMessage || "True") : (info.falseMessage || "False")}
+            </h1 > :
+            <Columns>
+                <Columns.Column>
+                    <Gauge value={currentValue}
+                        label={info.name}
+                        min={info.min} max={info.max}
+                        symbol={info.unit} height={height} width={width / 12 * 3} />
+                </Columns.Column>
+                <Columns.Column>
+                    <ChartContainer
+                        timeRange={new TimeRange([Date.now() - (info.plot_history || 600000), Date.now()])}
+                        width={width / 12 * 8}
+                        timeAxisTickCount={2}
+                        style={
+                            {
+                                label: {
+                                    stroke: "none",
+                                    fill: "#363636",
+                                    fontWeight: 100,
+                                    fontSize: 12
+                                },
+                                values: {
+                                    stroke: "none",
+                                    fill: "#363636",
+                                    fontWeight: 100,
+                                    fontSize: 11
+                                },
+                                ticks: { fill: "none", stroke: "#f5f5f5" },
+                                axis: { fill: "none", stroke: "transparent" }
+                            }
+                        }>
+                        <ChartRow height={height}>
+                            <YAxis
+                                id="axis1"
+                                label=""
+                                min={info.min}
+                                max={info.max}
+                                width="30"
+                                type={info.type || "linear"}
+                                format=".0f"
+                                tickCount={5}
+                                showGrid={true}
                                 style={
-                                    styler([
-                                        { key: "value", color: "#ff3034", width: 3 }
-                                    ])} />
-                        </Charts>
-                    </ChartRow>
-                </ChartContainer>
-            </Columns.Column>
-        </Columns >;
+                                    {
+                                        label: {
+                                            stroke: "none",
+                                            fill: "#363636",
+                                            fontWeight: 100,
+                                            fontSize: 12
+                                        },
+                                        values: {
+                                            stroke: "none",
+                                            fill: "#363636",
+                                            fontWeight: 100,
+                                            fontSize: 11,
+                                        },
+                                        ticks: { fill: "none", stroke: "#f5f5f5" },
+                                        axis: { fill: "none", stroke: "transparent" }
+                                    }}
+                            />
+                            <Charts>
+                                <LineChart
+                                    axis="axis1"
+                                    series={data}
+                                    interpolation="curveBasis"
+                                    column={["value"]}
+                                    style={
+                                        styler([
+                                            { key: "value", color: "#ff3034", width: 3 }
+                                        ])} />
+                            </Charts>
+                        </ChartRow>
+                    </ChartContainer>
+                </Columns.Column>
+            </Columns >;
     }
 }
 

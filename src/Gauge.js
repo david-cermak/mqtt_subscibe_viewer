@@ -88,7 +88,7 @@ Gauge.defaultProps = {
     color: '#ff3034',
     symbol: '',
     backgroundColor: "#f5f5f5",
-    topLabelStyle: { textAnchor: "middle", fill: "#363636", stroke: "none", fontStyle: "normal", fontVariant: "normal", fontWeight: 'normal', fontStretch: 'normal', lineHeight: 'normal', fontSize: '2em', fillOpacity: 1 },
-    valueLabelStyle: { textAnchor: "middle", fill: "#363636", stroke: "none", fontStyle: "normal", fontVariant: "normal", fontWeight: 'normal', fontStretch: 'normal', fontSize: '1.7em', lineHeight: 'normal', fillOpacity: 1 },
-    minMaxLabelStyle: { textAnchor: "middle", fill: "#ccc", stroke: "none", fontStyle: "normal", fontVariant: "normal", fontWeight: 'normal', fontStretch: 'normal', fontSize: '1.4em', lineHeight: 'normal', fillOpacity: 1 }
+    topLabelStyle: { textAnchor: "middle", fill: "#363636", stroke: "none", fontStyle: "normal", fontVariant: "normal", fontWeight: 'normal', fontStretch: 'normal', lineHeight: 'normal', fontSize: '1em', fillOpacity: 1 },
+    valueLabelStyle: { textAnchor: "middle", fill: "#363636", stroke: "none", fontStyle: "normal", fontVariant: "normal", fontWeight: 'normal', fontStretch: 'normal', fontSize: '1em', lineHeight: 'normal', fillOpacity: 1 },
+    minMaxLabelStyle: { textAnchor: "middle", fill: "#ccc", stroke: "none", fontStyle: "normal", fontVariant: "normal", fontWeight: 'normal', fontStretch: 'normal', fontSize: '1em', lineHeight: 'normal', fillOpacity: 1 }
 };

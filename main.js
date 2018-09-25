@@ -3,7 +3,6 @@ const electron = require('electron')
 const { app, BrowserWindow } = electron
 const path = require('path');
 const url = require('url');
-const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
 // Let electron reloads by itself
 if (process.env.ELECTRON_URL) {
@@ -29,16 +28,18 @@ app.on('ready', () => {
     slashes: true
   });
 
-  mainWindow.loadURL(startUrl)
+  mainWindow.loadURL(startUrl);
+  mainWindow.maximize();
 
   if (process.env.DEBUG_ELECTRON) {
+    const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
+
     installExtension(REACT_DEVELOPER_TOOLS)
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((err) => console.log('An error occurred: ', err));
 
     mainWindow.webContents.openDevTools()
   }
-
 
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows

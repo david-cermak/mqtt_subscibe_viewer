@@ -9,7 +9,9 @@ import { _ } from 'lodash';
 // Electron APIs
 const electron = window.require('electron');
 const remote = electron.remote;
+const app = remote.app;
 const fs = remote.require('fs');
+const path = remote.require('path');
 const mqtt = remote.require('mqtt');
 const currentWindow = remote.getCurrentWindow().removeAllListeners();
 
@@ -21,10 +23,9 @@ class App extends Component {
 
     // Read configs 
     const argv = remote.getGlobal('sharedObject').argv;
+    const fullPath = path.join(app.getPath('home'), ".mqtt-monitor.json");
+    let configPath = argv[1] ? (argv[1] === '.' ? "mqtt-monitor.json" : argv[1]) : fullPath
 
-    // TODO: actually use configs
-
-    let configPath = "mqtt-monitor.json";
     try {
       data = JSON.parse(fs.readFileSync(configPath));
       data.allTopics = [];
@@ -35,6 +36,7 @@ class App extends Component {
             (topic) => {
               data.allTopics.push(topic.path);
               data[topic.path] = new Ring(300);
+              data[`info::${topic.path}`] = topic;
             })
         }
       });
@@ -65,11 +67,22 @@ class App extends Component {
 
     client.on('message', (topic, message) => {
       const at = Date.now();
-
+      const info = this.state[`info::${topic}`];
+      const value = parseFloat(message) / info.scale;
       let updatedState = {};
-      this.state[topic].push([at, parseFloat(message)]);
+      this.state[topic].push([at, value]);
       updatedState[topic] = this.state[topic];
       this.setState(updatedState);
+
+      if (info.reset_period) {
+        setTimeout(() => {
+          const at = Date.now();
+          let updatedState = {};
+          this.state[topic].push([at, info.min]);
+          updatedState[topic] = this.state[topic];
+          this.setState(updatedState);
+        }, info.reset_period);
+      }
     })
 
     // Track window size
@@ -96,9 +109,8 @@ class App extends Component {
   renderDevices(devices) {
     const height = this.state.height / devices.length;
     return _.map(devices, (device) => {
-
       return <Columns key={device.name}>
-        <Columns.Column size={12} style={{ marginTop: "1em" }}><h1 className="title is-1">{device.name}</h1></Columns.Column>
+        <Columns.Column size={12} style={{ marginTop: "1em" }}><h1 className="title is-3">{device.name}</h1></Columns.Column>
         {this.renderTopics(device.topics, height)}
       </Columns>
     });
