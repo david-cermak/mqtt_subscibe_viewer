@@ -9,9 +9,9 @@
     "start": "electron .",
     "build": "parcel build ./src/index.html -d build/ --public-url ./",
     "pack": "electron-builder --dir",
-    "dist": "yarn build && electron-builder -mw",
+    "dist": "yarn build && electron-builder -mwl",
     "postinstall": "electron-builder install-app-deps",
-    "fullclean": "rm -rf .cache build"
+    "fullclean": "rm -rf .cache build dist"
   },
   "repository": "https://github.com/david-cermak/mqtt_subscibe_viewer.git",
   "keywords": [

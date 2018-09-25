@@ -39,7 +39,7 @@ class TopicCard extends Component {
         const info = this.props.info;
         const currentValue = this.lastValue(this.props.data.toArray()).toFixed(1);
         const width = this.props.width - 64;
-        const height = info.boolean ? 50 : Math.round(Math.max(this.props.height - 180, 160));
+        const height = info.boolean ? 50 : Math.round(Math.max(this.props.height - 90, 160));
 
 
 

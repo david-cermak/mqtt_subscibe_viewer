@@ -18,8 +18,8 @@ app.on('ready', () => {
   let mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    minHeight: 1200,
-    minWidth: 700
+    minHeight: 768,
+    minWidth: 1200
   })
 
   const startUrl = process.env.ELECTRON_URL || url.format({
