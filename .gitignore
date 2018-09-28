@@ -59,3 +59,13 @@ typings/
 
 # next.js build output
 .next
+
+# Electron dists
+dist
+
+# Parcel files
+.cache
+build
+
+# Overmind
+.overmind.sock

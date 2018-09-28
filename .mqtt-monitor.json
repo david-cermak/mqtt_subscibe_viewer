@@ -1,0 +1,94 @@
+{
+    "server": "mqtt://black-pearl.local:1883",
+    "devices": [
+        {
+            "name": "Mesh sense kit",
+            "topics": [
+                {
+                    "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:88:ad:44/cid_0000",
+                    "name": "Luminescence",
+                    "unit": "",
+                    "min": 1,
+                    "max": 4000,
+                    "scale": 1,
+                    "type": "log"
+                },
+                {
+                    "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:58:2f:04/cid_0001",
+                    "name": "Humidity",
+                    "unit": "%",
+                    "min": 0,
+                    "max": 100,
+                    "scale": 10
+                },
+                {
+                    "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:58:2f:04/cid_0002",
+                    "name": "Temperature",
+                    "unit": "°C",
+                    "min": -20,
+                    "max": 50,
+                    "scale": 10
+                }
+            ]
+        },
+        {
+            "name": "Face detection",
+            "topics": [
+                {
+                    "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:57:e0:d8/cid_0000",
+                    "name": "",
+                    "unit": "",
+                    "min": 0,
+                    "max": 1,
+                    "scale": 1,
+                    "reset_period": 2000,
+                    "boolean": true,
+                    "trueMessage": "Face detected!  😀 ",
+                    "falseMessage": " "
+                }
+            ]
+        },
+        {
+            "name": "MODBUS device - Sensor 1",
+            "topics": [
+                {
+                    "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:58:2f:04/cid_0000",
+                    "name": "Humidity",
+                    "unit": "%",
+                    "min": 0,
+                    "max": 100,
+                    "scale": 10
+                },
+                {
+                    "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:58:2f:04/cid_0001",
+                    "name": "Temperature",
+                    "unit": "°C",
+                    "min": -20,
+                    "max": 50,
+                    "scale": 10
+                }
+            ]
+        },
+        {
+            "name": "MODBUS device - Sensor 2",
+            "topics": [
+                {
+                    "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:58:2f:04/cid_0002",
+                    "name": "Humidity",
+                    "unit": "%",
+                    "min": 0,
+                    "max": 100,
+                    "scale": 10
+                },
+                {
+                    "path": "/topic/mesh_21:fe:34:32:12:1d/dev_30:ae:a4:58:2f:04/cid_0003",
+                    "name": "Temperature",
+                    "unit": "°C",
+                    "min": -20,
+                    "max": 50,
+                    "scale": 10
+                }
+            ]
+        }
+    ]
+}

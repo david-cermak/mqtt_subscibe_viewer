@@ -4,9 +4,14 @@
   "description": "simple mqtt client which subscribes to selected topic (argument) and displays as chart in electron",
   "main": "main.js",
   "scripts": {
+    "dev": "parcel ./src/index.html -d build/",
+    "start-dev": "ELECTRON_URL=http://localhost:1234 electron .",
     "start": "electron .",
+    "build": "parcel build ./src/index.html -d build/ --public-url ./",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "yarn build && electron-builder -mwl",
+    "postinstall": "electron-builder install-app-deps",
+    "fullclean": "rm -rf .cache build dist"
   },
   "repository": "https://github.com/david-cermak/mqtt_subscibe_viewer.git",
   "keywords": [
@@ -18,18 +23,33 @@
   "author": "david-cermak",
   "license": "Apache-2",
   "devDependencies": {
-    "electron": "^2.0.0",
-    "electron-builder": "^20.28.4"
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "electron-builder": "^20.28.4",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-reload": "^1.2.5",
+    "parcel-bundler": "^1.9.7",
+    "electron": "^3.0.0"
   },
   "dependencies": {
-    "chart.js": "^2.7.2",
-    "date-and-time": "^0.6.2",
-    "mqtt": "^2.18.8"
+    "bulma": "^0.7.1",
+    "mqtt": "^2.18.8",
+    "pondjs": "^0.8.9",
+    "react": "^16.0.0",
+    "react-bulma-components": "2.0.0",
+    "react-dom": "^16.5.2",
+    "react-timeseries-charts": "^0.15.3",
+    "ringjs": "^0.0.1"
   },
   "build": {
-    "appId": "my.id",
+    "appId": "mqttviewer.espressif.com",
     "win": {
-      "target": "NSIS"
-    }
+      "target": "portable"
+    },
+    "files": [
+      "main.js",
+      "build/*"
+    ]
   }
 }
